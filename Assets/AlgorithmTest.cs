@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class AlgorithmTest : MonoBehaviour
@@ -15,6 +16,18 @@ public class AlgorithmTest : MonoBehaviour
     private float bestSolutionCost;
     [SerializeField] private List<GameObject> corners;
     private List<_Individual> population = new List<_Individual>();
+
+
+    //The Problem
+
+    /* The problem for this algorithm is to create the lowest amounts of lights with the best intensity to fully light up 
+     * a given room. 
+     * 
+     * The genetic algorith can be suited very well for this problem as every parmeter for this problem is know and outcomes
+     * and changes can be calculated through the aglorithm
+     *
+     */
+
 
     void Start()
     {
@@ -32,6 +45,8 @@ public class AlgorithmTest : MonoBehaviour
             
         }
     }
+
+    //Running the algorithm 
 
     /* This method runs the genetic algorithm by:
      * creating the number of children per generation and creating a list of _Individual of the population size
@@ -131,6 +146,8 @@ public class AlgorithmTest : MonoBehaviour
     }
 }
 
+//The Individual
+
 /* This is the Individual which has 10 chromosomes */
 
 public class _Individual
@@ -150,6 +167,8 @@ public class _Individual
 
         CalculateCost();
     }
+
+    //Cost Function
 
     /* The cost for the _Individual is calculated through the the intensity of each light for every corner 
      * The cost is also calculated based on if the chromosone has its ShouldTurnOn set to 1 
@@ -308,3 +327,15 @@ public class Chromosome
         ShouldTurnOn = (Byte)UnityEngine.Random.Range(0, 2);
     }
 }
+
+// Results and Conclusion
+
+/*this genetic algorigm works as a basis for this problem. The problem can be improved by implmenting rotation tho the chromosome 
+ * and more calculations taking into consideration the unity based intensity system and range 
+ * 
+ * The cost has reached 1000 + the number of lights activated from an example value that I have seen of 8006, this does show improvment of the algorithm.
+ * Which does give a base repensentation of where lights should be placed but can be improved with an improvement to the cost function
+ * Potentially by making improvements to the positioning and rotations with a spot light and not an area light
+ * 
+ * 
+ */
