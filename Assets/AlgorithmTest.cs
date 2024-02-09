@@ -54,8 +54,8 @@ public class AlgorithmTest : MonoBehaviour
      * as the best solution and the best soltuion cost will now be the new individuals cost.
      * For each generation children are created from different parents and cross over and mutate and then added to
      * the children list.
-     * The children are then added to the population, sorted based on cost and then the best solution is chosen again 
-     * based on the new population.
+     * The children are then added to the population, and parents are removed from the population which is then
+     * sorted based on cost and then the best solution is chosen again based on the new population.
      */
 
     void RunGeneticAlgorithm()
@@ -87,7 +87,7 @@ public class AlgorithmTest : MonoBehaviour
                 _Individual parent1 = parents[0];
                 _Individual parent2 = parents[1];
 
-                List<_Individual> parents_children = parent1.Crossover(parent2,crossoverRate);
+                List<_Individual> parents_children = parent1.Crossover(parent2);
 
                 _Individual child1 = parents_children[0];
                 _Individual child2 = parents_children[1];
@@ -100,13 +100,22 @@ public class AlgorithmTest : MonoBehaviour
 
             }
 
+            List<_Individual> individualsToRemove = new List<_Individual>();
 
+            foreach (_Individual parent in population)
+            {
+                individualsToRemove.Add(parent);
+            }
 
-            foreach(_Individual child in children)
+            foreach (_Individual child in children)
             {
                 population.Add(child);
             }
 
+            foreach (_Individual individualToRemove in individualsToRemove)
+            {
+                population.Remove(individualToRemove);
+            }
 
             population.Sort((x, y) => x.cost.CompareTo(y.cost));
 
@@ -120,7 +129,6 @@ public class AlgorithmTest : MonoBehaviour
             Debug.Log(bestSolutionCost);
 
         }
-        Debug.Log(population.Count);
     }
 
     /* This is a helper method to choose the parents of children and ensures that each parent 
@@ -270,15 +278,13 @@ public class _Individual
 
     /* CrossOver that is implmented here is where parent 2's chromosones are set for child 1 and parent 1's chromosones are set as child 2's */
 
-    public List<_Individual> Crossover(_Individual parent2, float crossoverRate)
+    public List<_Individual> Crossover(_Individual parent2)
     {
         _Individual _child1 = this;
         _Individual _child2 = parent2;
-        if (RandomNormal(0.0f, 1.0f) < crossoverRate)
-        {
-            _child1.chromosomes = parent2.chromosomes;
-            _child2.chromosomes = this.chromosomes;
-        }
+
+         _child1.chromosomes = parent2.chromosomes;
+         _child2.chromosomes = this.chromosomes;
 
         List<_Individual> _children = new List<_Individual>();
 
